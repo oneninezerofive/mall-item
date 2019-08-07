@@ -13,6 +13,10 @@ var orderListRouter = require('./routes/getlist');
 var updataRouter = require('./routes/updata');
 var checknameRouter = require('./routes/checkname');
 var signInRouter = require('./routes/signIn');
+var FindlistRouter = require('./routes/findlist');
+var DelshopRouter = require('./routes/delshop');
+var AddshopRouter = require('./routes/addshop');
+var SelectshopRouter = require('./routes/selectshop');
 
 var app = express();
 
@@ -35,6 +39,10 @@ app.use('/getorder', orderListRouter);
 app.use('/updata', updataRouter);
 app.use('/checkname', checknameRouter);
 app.use('/signIn', signInRouter);
+app.use('/findlist', FindlistRouter);
+app.use('/delshop', DelshopRouter);
+app.use('/addshop', AddshopRouter);
+app.use('/selectshop', SelectshopRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

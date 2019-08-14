@@ -1,4 +1,4 @@
-console.log(222);
+﻿console.log(222);
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -16,7 +16,9 @@ var signInRouter = require('./routes/signIn');
 var FindlistRouter = require('./routes/findlist');
 var DelshopRouter = require('./routes/delshop');
 var AddshopRouter = require('./routes/addshop');
+var newListRouter = require('./routes/newList');
 var SelectshopRouter = require('./routes/selectshop');
+var FinduserRouter = require('./routes/finduser');
 
 var app = express();
 
@@ -43,6 +45,8 @@ app.use('/findlist', FindlistRouter);
 app.use('/delshop', DelshopRouter);
 app.use('/addshop', AddshopRouter);
 app.use('/selectshop', SelectshopRouter);
+app.use('/new',newListRouter);
+app.use('/finduser',FinduserRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

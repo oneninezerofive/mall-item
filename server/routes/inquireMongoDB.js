@@ -35,11 +35,11 @@
 
 
     //=================查询数据库================================
-    const select = async (collec, param, cb) => {
+    const select = async (collec, param = {}, cb) => {
         const client = await ConnectionMongoDB();
         //链接到MongoDB里的数据库
         const db = client.db(dbName);
-        // Get the documents collection //确定表(集合)名;
+        
         const collection = db.collection(collec);
         // Find some documents //查找到给定参数param的值
         collection.find(param).toArray(function (err, docs) {
@@ -55,14 +55,15 @@
     };
 
     //=================条件限制查询数据库================================
-    const limitSelect = async (collec, param, cb) => {
+    const limitSelect = async (collec, param = {}, index = 0, counst = 1000, cb) => {
+
         const client = await ConnectionMongoDB();
         //链接到MongoDB里的数据库
         const db = client.db(dbName);
         // Get the documents collection //确定表(集合)名;
         const collection = db.collection(collec);
         // Find some documents //查找到给定参数param的值
-        collection.find(param).toArray(function (err, docs) {
+        collection.find(param).skip(index /* */ ).limit(counst).toArray(function (err, docs) {
             if (err) {
                 throw err;
             } else {
@@ -74,9 +75,8 @@
 
     };
 
-
-    //====================删除===============================
-    const del = async (collec, param, cb) => {
+    //====================删除单个文档document===============================
+    const delOne = async (collec, param, cb) => {
 
         const client = await ConnectionMongoDB();
         //链接到MongoDB里的数据库
@@ -91,8 +91,47 @@
                 cb(docs)
             }
         });
+        //执行 db.repairDatabase() 来回收磁盘空间。
+        await db.repairDatabase();
         client.close();
     };
+
+    //====================同时删除多个文档document===============================
+    const delMany = async (collec, param, cb) => {
+
+        const client = await ConnectionMongoDB();
+        //链接到MongoDB里的数据库
+        const db = client.db(dbName);
+
+        const collection = db.collection(collec);
+        //删除所有满足param条件的文档documents
+        collection.deletMany(param, (err, docs) => {
+            if (err) {
+                throw err;
+            } else {
+                cb(docs)
+            }
+        });
+        //执行 db.repairDatabase() 来回收磁盘空间。
+        await db.repairDatabase();
+        client.close();
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -139,11 +178,13 @@
         client.close();
     };
 
+
     //===========导出模块=======================================
     module.exports = {
         ObjectID,
         select,
-        del,
+        delOne,
+        delMany,
         updata,
         insert,
         limitSelect
